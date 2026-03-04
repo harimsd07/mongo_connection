@@ -3,52 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response; // ✅ Add this
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $products = Product::all();
-        return response()->json($products);
+        return Response::json($products); // ✅ No warning
     }
 
-    // POST /products
     public function store(Request $request)
     {
-        $request->validate([
-            'name'        => 'required|string',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric',
-            'quantity'    => 'required|integer',
-        ]);
-
         $product = Product::create($request->all());
-        return response()->json($product, 201);
+        return Response::json($product, 201);
     }
 
-    // GET /products/{id}
-    public function show($id)
+    public function show(string $id)
     {
         $product = Product::findOrFail($id);
-        return response()->json($product);
+        return Response::json($product);
     }
 
-    // PUT /products/{id}
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $product = Product::findOrFail($id);
         $product->update($request->all());
-        return response()->json($product);
+        return Response::json($product);
     }
 
-    // DELETE /products/{id}
-    public function destroy($id)
+    public function destroy(string $id)
     {
         Product::findOrFail($id)->delete();
-        return response()->json(['message' => 'Product deleted successfully']);
+        return Response::json(['message' => 'Product deleted successfully']);
     }
 }
