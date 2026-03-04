@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\ServiceProvider;
+
 return [
 
     /*
@@ -123,8 +125,8 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
-     'providers' => [
+      'providers' => ServiceProvider::defaultProviders()->merge([
         MongoDB\Laravel\MongoDBServiceProvider::class,
-    ],
+    ])->toArray(),
 
 ];
