@@ -8,13 +8,21 @@ nixPkgs = [
     "php84Extensions.zip",
     "php84Extensions.pdo",
     "php84Extensions.tokenizer",
-    "php84Extensions.bcmath"
+    "php84Extensions.bcmath",
+    "nodejs_20",
+    "npm"
 ]
 
 [phases.install]
 cmds = [
     "curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer",
-    "php /usr/local/bin/composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-req=ext-mongodb"
+    "php /usr/local/bin/composer install --optimize-autoloader --no-dev --no-interaction --ignore-platform-req=ext-mongodb",
+    "npm install"
+]
+
+[phases.build]
+cmds = [
+    "npm run build"
 ]
 
 [start]
