@@ -27,6 +27,7 @@ RUN npm install && npm run build
 
 EXPOSE 8000
 
-CMD php artisan config:cache && \
-    php artisan route:cache && \
+CMD php artisan config:cache && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+CMD echo "Starting on port: ${PORT}" && \
+    php artisan config:cache && \
     php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
