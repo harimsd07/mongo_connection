@@ -6,7 +6,13 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install mbstring xml bcmath pdo zip fileinfo
 
-RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN pecl config-set php_ini /usr/local/etc/php/php.ini && \
+    mkdir -p /tmp/mongodb-src && \
+    curl -L --retry 5 --retry-delay 3 -o /tmp/mongodb-src/mongodb.tgz \
+    https://pecl.php.net/get/mongodb && \
+    pecl install /tmp/mongodb-src/mongodb.tgz && \
+    docker-php-ext-enable mongodb && \
+    rm -rf /tmp/mongodb-src
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
