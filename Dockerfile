@@ -7,13 +7,14 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libzip-dev \
     zip \
     unzip \
     nodejs \
     npm
 
 # Install PHP extensions
-RUN docker-php-ext-install mbstring xml bcmath pdo
+RUN docker-php-ext-install mbstring xml bcmath pdo zip fileinfo
 
 # Install MongoDB PHP extension
 RUN pecl install mongodb && docker-php-ext-enable mongodb
@@ -27,14 +28,14 @@ WORKDIR /app
 # Copy project files
 COPY . .
 
+# Set storage permissions
+RUN chmod -R 775 storage bootstrap/cache
+
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev --no-interaction
 
 # Install Node dependencies and build
 RUN npm install && npm run build
-
-# Set permissions
-RUN chmod -R 775 storage bootstrap/cache
 
 EXPOSE 8000
 
